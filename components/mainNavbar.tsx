@@ -45,7 +45,7 @@ export default function MainNavbar() {
                 <NavigationMenuList>
 
             <NavigationMenuItem>
-                            <Link href="/docs" legacyBehavior passHref>
+                            <Link href="/sign-in" legacyBehavior passHref>
                                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                                     Masuk
                                 </NavigationMenuLink>

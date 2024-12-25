@@ -17,15 +17,24 @@ import {
     gambar : string,
     terkumpul : number,
     target : number,
+    progress : number,
   }
 
-export default function CardJembatan({namaJembatan, deskripsi, gambar, terkumpul, target}: CardProps){
+export default function CardJembatan({namaJembatan, deskripsi, gambar, terkumpul, target, progress}: CardProps){
     return(
         <div >
 
-        <Card className="w-[360px] h-[480px]">
-        <Image 
-            className="bg-cover mb-4" height={120} width={360} alt="" src={`${gambar}`}/>
+        <Card className="w-[360px] h-[450px]">
+        <div className="relative w-full aspect-[16/9] overflow-hidden">
+  <Image
+    className="object-cover"
+    src={`${gambar}`}
+    alt="Jembatan"
+    layout="fill" // Membuat gambar memenuhi pembungkus
+  />
+</div>
+
+
                 <div className="m-4 mb-6">
             <CardTitle>{namaJembatan}
 
@@ -34,10 +43,10 @@ export default function CardJembatan({namaJembatan, deskripsi, gambar, terkumpul
                     {deskripsi}
                 </CardDescription>
                 <CardContent>
-                    <Progress className="mt-4" value={20}/>
+                    <Progress className="mt-4" value={progress}/>
                     <div className="flex justify-between">
-                        <p className="text-sm"> Rp {terkumpul}.000.000</p>
-                        <p className="text-sm"> Rp {target}.000.000</p>
+                        <p className="text-sm"> Rp {terkumpul}</p>
+                        <p className="text-sm"> Rp {target}</p>
                     </div>
                 </CardContent>
                 </div>
