@@ -16,7 +16,6 @@ import { Button } from '../ui/button';
 import Link from 'next/link';
 import GoogleSignInButton from '../GoogleSignInButton';
 import {signIn} from 'next-auth/react'
-
 import { useRouter } from 'next/navigation';
 
 const FormSchema = z.object({
@@ -41,13 +40,17 @@ const SignInForm = () => {
 
     const signInData = await signIn('credentials', {
       email : values.email,
-      password : values.password
+      password : values.password,
+      redirect: false
     })
     if(signInData?.error) {
       console.log(signInData.error)
-    } else {
+    } 
+    if(signInData?.ok){
+
       router.push("/admin")
     }
+    
   };
 
   return (
