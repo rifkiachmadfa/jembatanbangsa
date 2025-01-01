@@ -14,12 +14,6 @@ async function page() {
     
       )
     }
-    
-    return (
-      
-      <h1>please login</h1>
-      
-   )
   
  
 }

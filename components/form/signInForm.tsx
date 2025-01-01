@@ -18,6 +18,7 @@ import { useToast } from "@/hooks/use-toast"
 import {signIn} from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 
+
 const FormSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email'),
   password: z
@@ -27,6 +28,7 @@ const FormSchema = z.object({
 });
 
 const SignInForm = () => {
+  
   const router = useRouter()
   const { toast } = useToast()
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -38,7 +40,7 @@ const SignInForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-
+    
     const signInData = await signIn('credentials', {
       email : values.email,
       password : values.password,
@@ -50,14 +52,22 @@ const SignInForm = () => {
         description: "ada yang salah",
         variant: "destructive"
       })
-    } 
-    else{
-
-      router.push("/admin")
-      router.refresh()
+    } else {
+      // Ambil data sesi dari API bawaan NextAuth
+      const response = await fetch("/api/auth/session");
+      const session = await response.json();
+  
+      if (session?.user?.role === "admin") {
+        router.push("/admin"); // Redirect ke halaman admin
+      } else if (session?.user?.role === "pengaju") {
+        router.push("/user"); // Redirect ke halaman user
+      } else {
+        router.push("/"); // Redirect ke halaman default jika role tidak dikenali
+      }
+      router.refresh(); // Segarkan halaman setelah redirect
     }
     
-  };
+  };  
 
   return (
     <Form {...form}>

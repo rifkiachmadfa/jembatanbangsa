@@ -17,12 +17,12 @@ export const authOptions : NextAuthOptions = {
 
     providers: [
         CredentialsProvider({
-
+          
           name: "Credentials",
 
           credentials: {
             email: { label: "Email", type: "email", placeholder: "jsmith@mail.com" },
-            password: { label: "Password", type: "password" }
+            password: { label: "Password", type: "password" },
           },
           async authorize(credentials) {
             if(!credentials?.email || !credentials?.password) {
@@ -42,12 +42,13 @@ export const authOptions : NextAuthOptions = {
             if(!passwordMatch){
                 return null
             }
-
+            console.log(existingUser)
 
             return {
                 id : `${existingUser.id}`,
                 username : existingUser.username,
-                email : existingUser.email
+                email : existingUser.email,
+                role : existingUser.role
             }
           }
         })
@@ -60,6 +61,7 @@ export const authOptions : NextAuthOptions = {
                 return {
                     ...token,
                     username : user.username,
+                    role     : user.role
                 }
 
             }
@@ -72,7 +74,8 @@ export const authOptions : NextAuthOptions = {
                 ...session,
                 user : {
                     ...session.user,
-                    username : token.username
+                    username : token.username,
+                    role     : token.role
                 }
             }
           }
