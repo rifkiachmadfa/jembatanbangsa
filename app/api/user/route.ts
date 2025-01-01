@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       body = await req.json();
     } catch (error) {
       return NextResponse.json(
-        { user: null, message: "Invalid JSON body", },
+        { user: null, message: "Invalid JSON body", error },
         { status: 400 },   // 400 Bad Request
       );
     }
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
     const  {password: newUserPassword, ...rest} = newUser
 
     return NextResponse.json(
-      { user: rest, message: "User created successfully" },
+      { user: rest, message: "User created successfully", newUserPassword },
       { status: 201 }
     );
   } catch (error) {
