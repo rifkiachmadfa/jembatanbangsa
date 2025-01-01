@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       body = await req.json();
     } catch (error) {
       return NextResponse.json(
-        { user: null, message: "Invalid JSON body" },
+        { user: null, message: "Invalid JSON body", error },
         { status: 400 } // 400 Bad Request
       );
     }
@@ -64,11 +64,11 @@ export async function POST(req: Request) {
       },
     });
 
-    const  {password: newUserPassword, ...rest} = newUser
-
+    
+    
     return NextResponse.json(
-      { user: rest, message: "User created successfully" },
-      { status: 201 }
+      { user: newUser, message: "User created successfully" },
+      { status: 201, },
     );
   } catch (error) {
     console.error("Error in POST /api/user:", error);
