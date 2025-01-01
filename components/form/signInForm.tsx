@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import Link from 'next/link';
-import GoogleSignInButton from '../GoogleSignInButton';
+import { useToast } from "@/hooks/use-toast"
 import {signIn} from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 
@@ -28,6 +28,7 @@ const FormSchema = z.object({
 
 const SignInForm = () => {
   const router = useRouter()
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -44,11 +45,16 @@ const SignInForm = () => {
       redirect: false
     })
     if(signInData?.error) {
-      console.log(signInData.error)
+      toast({
+        title: "Perhatian",
+        description: "ada yang salah",
+        variant: "destructive"
+      })
     } 
-    if(signInData?.ok){
+    else{
 
       router.push("/admin")
+      router.refresh()
     }
     
   };
