@@ -70,8 +70,8 @@ export async function POST(req: Request) {
       { user: newUser, message: "User created successfully" },
       { status: 201, },
     );
-  } catch (error) {
-    console.error("Error in POST /api/user:", error);
+  } catch {
+    console.error("Error in POST /api/user:", );
     return NextResponse.json(
       { user: null, message: "Internal server error" },
       { status: 500 }
