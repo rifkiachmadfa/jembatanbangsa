@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     } catch (error) {
       return NextResponse.json(
         { user: null, message: "Invalid JSON body", error },
-        { status: 400 } // 400 Bad Request
+        { status: 400 },   // 400 Bad Request
       );
     }
 
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
     
     return NextResponse.json(
       { user: newUser, message: "User created successfully" },
-      { status: 201, },
+      { status: 201 }
     );
   } catch {
     console.error("Error in POST /api/user:", );

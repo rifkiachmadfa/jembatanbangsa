@@ -15,12 +15,16 @@ import {
     namaJembatan : string,
     deskripsi : string,
     gambar : string,
-    terkumpul : number,
-    target : number,
+    terkumpul : bigint,
+    target : bigint,
     progress : number,
+    id : string
   }
 
-export default function CardJembatan({namaJembatan, deskripsi, gambar, terkumpul, target, progress}: CardProps){
+import Link from "next/link"
+
+export default async function CardJembatan({namaJembatan, deskripsi, gambar, terkumpul, target, progress, id}: CardProps){
+
     return(
         <div >
 
@@ -52,7 +56,9 @@ export default function CardJembatan({namaJembatan, deskripsi, gambar, terkumpul
                 </div>
                 <div className="flex justify-end mr-4">
                 <CardFooter>
+                    <Link href={`/detail/jembatan/${id}`}>
                     <Button>selengkapnya</Button>
+                    </Link>
                 </CardFooter>
                 </div>
 

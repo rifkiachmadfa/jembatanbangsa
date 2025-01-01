@@ -14,46 +14,26 @@ datasource db {
 }
 
 model User {
-  id       Int            @id @default(autoincrement())
-  email    String         @unique
-  username String         @unique
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  username String @unique
   password String
-  post     Datajembatan[]
-  role     String         @default("pengaju")
-  createAt DateTime       @default(now())
-  updateAt DateTime       @updatedAt
+
+  role     String   @default("pengaju")
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 }
 
-model Datajembatan {
-  id                   Int            @id @default(autoincrement())
-  namaJembatan         String
-  alamat               String
-  deskripsi            String
-  panjangBentangan     Float // Menggunakan Float untuk angka desimal
-  jenisPengajuan       JenisPengajuan @default(PEMBANGUNAN_TOTAL) // Enum untuk jenis pengajuan
-  tahunPembuatan       Int // Tahun pembuatan jembatan
-  penerimaManfaat      String // Informasi penerima manfaat
-  panjangBibirJembatan Float
-  biayaPembangunan     Float
-  gambarDepan          String // URL atau path gambar
-  gambarBelakang       String
-  gambarSisiA          String
-  gambarSisiB          String
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @updatedAt
-
-  // Kolom tambahan untuk renovasi (null jika pembangunan total)
-  panjangPapanPijak        Float? // Float dengan '?' berarti opsional
-  lebarGapuraDalam         Float?
-  jenisBesiTiang           String? // Deskripsi atau jenis besi tiang
-  boxGapura                String? // Deskripsi atau nama box gapura
-  panjangBoxAnchorBelakang Float?
-  tinggiGapura             Float?
-  User                     User?   @relation(fields: [userId], references: [id])
-  userId                   Int?
-}
-
-enum JenisPengajuan {
-  PEMBANGUNAN_TOTAL
-  RENOVASI
+model Jembatan {
+  id        String   @id @default(cuid())
+  judul     String
+  alamat    String
+  content   String
+  image     String
+  progress  Int
+  terkumpul Int
+  target    Int
+  published Boolean  @default(false)
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
 }
