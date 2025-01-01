@@ -9,7 +9,7 @@ export const authOptions : NextAuthOptions = {
     adapter : PrismaAdapter(db),
     secret: process.env.NEXTAUTH_SECRET,
     session: {
-        strategy : 'jwt'
+        strategy : 'jwt',
     },
     pages : {
         signIn : '/sign-in',
@@ -53,7 +53,7 @@ export const authOptions : NextAuthOptions = {
           }
         })
       ],
-
+      
       callbacks: {
         async jwt({ token, user }) {
             

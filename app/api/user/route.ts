@@ -23,8 +23,8 @@ export async function POST(req: Request) {
       body = await req.json();
     } catch (error) {
       return NextResponse.json(
-        { user: null, message: "Invalid JSON body" },
-        { status: 400 } // 400 Bad Request
+        { user: null, message: "Invalid JSON body", },
+        { status: 400 },   // 400 Bad Request
       );
     }
 
