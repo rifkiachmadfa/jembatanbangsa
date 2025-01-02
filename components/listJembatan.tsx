@@ -1,8 +1,7 @@
-import { bigint } from "zod";
 import CardJembatan from "./cardJembatan";
-import { link } from "fs";
 
 export default async function ListJembatan() {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const jembatan = [
     {
       id: 1,
@@ -24,6 +23,7 @@ export default async function ListJembatan() {
       terkumpul: BigInt(68000000),
       link: "248923348029",
     },
+    /* eslint-enable @typescript-eslint/no-unused-vars */
     // Tambahkan lebih banyak objek untuk jembatan lainnya
   ];
   return (
