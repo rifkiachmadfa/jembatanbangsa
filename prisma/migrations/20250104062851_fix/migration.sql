@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Jembatan" ALTER COLUMN "progress" SET DEFAULT 0,
+ALTER COLUMN "terkumpul" SET DEFAULT 0,
+ALTER COLUMN "target" SET DEFAULT 0;

@@ -18,7 +18,6 @@ interface CardProps {
   terkumpul: bigint;
   target: bigint;
   progress: number;
-  id: string;
   link: string;
 }
 

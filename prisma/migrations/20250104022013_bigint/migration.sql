@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Jembatan" ALTER COLUMN "terkumpul" SET DATA TYPE BIGINT,
+ALTER COLUMN "target" SET DATA TYPE BIGINT;

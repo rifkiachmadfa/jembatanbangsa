@@ -6,24 +6,22 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/client"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  username String @unique
+  id       Int        @id @default(autoincrement())
+  email    String     @unique
+  username String     @unique
   password String
-
-  role     String   @default("pengaju")
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  jembatan Jembatan[]
+  role     String     @default("pengaju")
+  createAt DateTime   @default(now())
+  updateAt DateTime   @updatedAt
 }
 
 model Jembatan {
@@ -32,10 +30,12 @@ model Jembatan {
   alamat    String
   content   String
   image     String
-  progress  Int
-  terkumpul Int
-  target    Int
+  progress  Int      @default(0)
+  terkumpul Int      @default(0)
+  target    Int      @default(0)
   published Boolean  @default(false)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
   createAt  DateTime @default(now())
   updateAt  DateTime @updatedAt
 }

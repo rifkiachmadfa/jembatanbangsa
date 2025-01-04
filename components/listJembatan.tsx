@@ -1,31 +1,15 @@
+import { db } from "@/lib/db";
 import CardJembatan from "./cardJembatan";
 
 export default async function ListJembatan() {
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  const jembatan = [
-    {
-      id: 1,
-      namaJembatan: "Jembatan Pelangi",
-      deskripsi: "Menghubungkan Desa A dan B",
-      gambar: "/images/jembatan1.jpg",
-      progress: 60,
-      target: BigInt(100000000),
-      terkumpul: BigInt(60000000),
-      link: "248923348029111",
-    },
-    {
-      id: 2,
-      namaJembatan: "Jembatan Harapan",
-      deskripsi: "Melintasi Sungai C",
-      gambar: "/images/jembatan2.jpg",
-      progress: 85,
-      target: BigInt(80000000),
-      terkumpul: BigInt(68000000),
-      link: "248923348029",
-    },
-    /* eslint-enable @typescript-eslint/no-unused-vars */
-    // Tambahkan lebih banyak objek untuk jembatan lainnya
-  ];
+
+
+
+  const jembatan = await db.jembatan.findMany( {
+    where : {
+      published : false
+    }
+  })
   return (
     <>
       <div className="flex justify-center">
@@ -33,14 +17,13 @@ export default async function ListJembatan() {
           {jembatan.map((data) => (
             <CardJembatan
               key={data.id}
-              namaJembatan={data.namaJembatan}
-              deskripsi={data.deskripsi}
-              gambar={data.gambar}
+              namaJembatan={data.judul}
+              deskripsi={data.alamat}
+              gambar={data.image}
               progress={data.progress}
-              target={data.target}
-              terkumpul={data.terkumpul}
-              id={data.link}
-              link={data.link}
+              target={BigInt(data.target)}
+              terkumpul={BigInt(data.terkumpul)}
+              link={data.id}
             />
           ))}
         </div>

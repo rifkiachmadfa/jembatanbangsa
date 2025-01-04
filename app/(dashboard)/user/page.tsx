@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import React from 'react'
 import Link from 'next/link'
-
+import ListJembatanUser from '@/components/listJembatanUser'
 function page() {
   return (
     <div>
@@ -10,6 +10,7 @@ function page() {
         <Link href='/user/pengajuan'>
         <Button>ajukan</Button>
         </Link>
+    <ListJembatanUser/>
     </div>
   )
 }

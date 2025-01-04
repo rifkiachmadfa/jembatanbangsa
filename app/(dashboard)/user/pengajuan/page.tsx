@@ -1,8 +1,14 @@
-import React from 'react'
+import DataJembatan from '@/components/form/dataJembatan'
 
-function page() {
+
+const page  = async () => {
+
+
   return (
-    <div>page</div>
+    <div>
+
+      <DataJembatan/>
+    </div>
   )
 }
 
