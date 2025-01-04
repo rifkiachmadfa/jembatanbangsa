@@ -5,16 +5,23 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-
 // POST Handler
 export async function POST(req: NextRequest) {
-
   try {
     const session = await getServerSession(authOptions);
-    const body = await req.json()
-    const { judul, alamat, content, image} = body;
-   
-
+    const body = await req.json();
+    const {
+      judul,
+      alamat,
+      content,
+      image,
+      panjangBentangan,
+      penerimaManfaat,
+      panjangBibir,
+      jenisPembangunan,
+      panjangPapanPijak,
+      lebarGapuraDalam,
+    } = body;
     // Insert data into the `jembatan` table
     const newJembatan = await db.jembatan.create({
       data: {
@@ -22,20 +29,27 @@ export async function POST(req: NextRequest) {
         alamat,
         content,
         image,
-        user : {
-            connect: {
-              email : session?.user.email as string
-            },
-        }
+        penerimaManfaat,
+        panjangBentangan,
+        panjangBibir,
+        jenisPembangunan,
+        panjangPapanPijak,
+        lebarGapuraDalam,
+        user: {
+          connect: {
+            email: session?.user.email as string,
+          },
+        },
       },
     });
 
-    return NextResponse.json({ message: "Data inserted successfully", newJembatan });
+    return NextResponse.json({
+      message: "Data inserted successfully",
+      newJembatan,
+    });
   } catch (error) {
-    
     console.error("Error inserting data:", error);
-    return NextResponse.json({ error: "Invalid JSON format" },
-      { status: 400 } );
+    return NextResponse.json({ error: "Invalid JSON format" }, { status: 400 });
   }
 }
 

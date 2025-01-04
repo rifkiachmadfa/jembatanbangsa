@@ -25,17 +25,37 @@ model User {
 }
 
 model Jembatan {
-  id        String   @id @default(cuid())
-  judul     String
-  alamat    String
-  content   String
-  image     String
-  progress  Int      @default(0)
-  terkumpul Int      @default(0)
-  target    Int      @default(0)
-  published Boolean  @default(false)
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  createAt  DateTime @default(now())
-  updateAt  DateTime @updatedAt
+  id                          String           @id @default(cuid())
+  judul                       String
+  alamat                      String
+  content                     String
+  image                       String
+  penerimaManfaat             Int
+  status                      String           @default("Butuh Pendanaan")
+  panjangBentangan            Float
+  panjangBibir                Float
+  jenisPembangunan            JenisPembangunan @default(fullPembangunan)
+     tahunPembuatan              DateTime?
+  panjangGapuraAnchorBelakang Float?
+  panjangPapanPijak         Float?
+  lebarGapuraDalam           Float?
+  boxGapura                 Float?
+  lebarGapuraAs              Float?
+  panjangBoxAnchorBelakang  Float?
+  tinggiGapura               Float?
+  jenisBesiTiang             String?
+  progress                    Int              @default(0)
+  terkumpul                   Int              @default(0)
+  target                      Int              @default(0)
+  published                   Boolean          @default(false)
+  userId                      Int
+  user                        User             @relation(fields: [userId], references: [id])
+  createAt                    DateTime         @default(now())
+  updateAt                    DateTime         @updatedAt
+}
+
+
+enum JenisPembangunan {
+  fullPembangunan
+  renovasi
 }
