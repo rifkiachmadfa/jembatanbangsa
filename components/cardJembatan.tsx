@@ -5,6 +5,7 @@ import {
   CardFooter,
   CardTitle,
 } from "@/components/ui/card";
+// import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 import { Button } from "./ui/button";
 import Image from "next/image";
@@ -15,9 +16,9 @@ interface CardProps {
   namaJembatan: string;
   deskripsi: string;
   gambar: string;
-  terkumpul: bigint;
-  target: bigint;
-  progress: number;
+  terkumpul: number;
+  target: number;
+  user: string;
   link: string;
 }
 
@@ -29,18 +30,20 @@ export default async function CardJembatan({
   gambar,
   terkumpul,
   target,
-  progress,
+  user,
   link,
 }: CardProps) {
+  const nilai = (terkumpul * 100) / target;
   return (
     <div>
-      <Card className="w-[360px] h-[450px]">
-        <div className="relative w-full aspect-[16/9] overflow-hidden">
+      <Card className="w-[360px] h-[500px] rounded ">
+        <div className="h-[240]">
           <Image
-            className="object-cover"
             src={`${gambar}`}
             alt="Jembatan"
-            layout="fill" // Membuat gambar memenuhi pembungkus
+            width={0}
+            height={0}
+            className="w-full h-full"
           />
         </div>
 
@@ -48,20 +51,26 @@ export default async function CardJembatan({
           <CardTitle>{namaJembatan}</CardTitle>
           <CardDescription className="h-[60px]">{deskripsi}</CardDescription>
           <CardContent>
-            <Progress className="mt-4" value={progress} />
+            <Progress className="mt-4" value={nilai} />
             <div className="flex justify-between">
               <p className="text-sm"> Rp {terkumpul}</p>
               <p className="text-sm"> Rp {target}</p>
             </div>
           </CardContent>
         </div>
-        <div className="flex justify-end mr-4">
-          <CardFooter>
-            <Link href={`/detail/jembatan/${link}`}>
-              <Button>selengkapnya</Button>
-            </Link>
-          </CardFooter>
-        </div>
+
+        <CardFooter>
+          <div className="flex justify-between w-full  mx-2">
+            <div className="w-[100px]">
+              <p className="text-sm">diajukan oleh {user}</p>
+            </div>
+            <div>
+              <Link href={`/detail/jembatan/${link}`}>
+                <Button>selengkapnya</Button>
+              </Link>
+            </div>
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );

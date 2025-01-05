@@ -2,14 +2,14 @@ import { db } from "@/lib/db";
 import CardJembatan from "./cardJembatan";
 
 export default async function ListJembatan() {
-
-
-
-  const jembatan = await db.jembatan.findMany( {
-    where : {
-      published : false
-    }
-  })
+  const jembatan = await db.jembatan.findMany({
+    where: {
+      published: false,
+    },
+    include: {
+      user: true,
+    },
+  });
   return (
     <>
       <div className="flex justify-center">
@@ -20,10 +20,10 @@ export default async function ListJembatan() {
               namaJembatan={data.judul}
               deskripsi={data.alamat}
               gambar={data.image}
-              progress={data.progress}
-              target={BigInt(data.target)}
-              terkumpul={BigInt(data.terkumpul)}
+              target={data.target}
+              terkumpul={data.terkumpul}
               link={data.id}
+              user={data.user.username}
             />
           ))}
         </div>

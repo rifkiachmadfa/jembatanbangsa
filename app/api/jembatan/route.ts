@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
       jenisPembangunan,
       panjangPapanPijak,
       lebarGapuraDalam,
+      tahunPembuatan,
     } = body;
     // Insert data into the `jembatan` table
     const newJembatan = await db.jembatan.create({
@@ -35,6 +36,7 @@ export async function POST(req: NextRequest) {
         jenisPembangunan,
         panjangPapanPijak,
         lebarGapuraDalam,
+        tahunPembuatan,
         user: {
           connect: {
             email: session?.user.email as string,

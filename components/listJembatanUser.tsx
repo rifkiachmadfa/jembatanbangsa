@@ -9,7 +9,11 @@ export default async function ListJembatanUser() {
 
   if (!session || !session.user?.email) {
     // Jika tidak ada sesi, minta login
-    return <p className="text-center">Silakan login untuk melihat data jembatan Anda.</p>;
+    return (
+      <p className="text-center">
+        Silakan login untuk melihat data jembatan Anda.
+      </p>
+    );
   }
 
   // Ambil data jembatan berdasarkan email pengguna
@@ -36,10 +40,10 @@ export default async function ListJembatanUser() {
             namaJembatan={data.judul}
             deskripsi={data.alamat}
             gambar={data.image}
-            progress={data.progress}
-            target={BigInt(data.target)}
-            terkumpul={BigInt(data.terkumpul)}
+            target={data.target}
+            terkumpul={data.terkumpul}
             link={data.id}
+            user="anda"
           />
         ))}
       </div>

@@ -23,18 +23,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import ReactDropzone from "../ui/reactDropZone";
 
 const FormSchema = z.object({
-  judul: z.string().min(1, "Judul is required").max(100),
-  alamat: z.string().min(1, "Email is required").max(100),
-  content: z.string().min(1, "Email is required"),
-  image: z.string().min(1, "gambar is required"),
+  judul: z.string().min(1, "tolong isi Judul").max(23),
+  alamat: z.string().min(1, "tolong isi alamat ").max(120),
+  content: z.string().min(1, "tolong isi deskripsi"),
+  image: z.string().min(1, "tolong isi gambar"),
   penerimaManfaat: z.number().positive().min(1, "dalam jumlah jiwa"),
   panjangBentangan: z.number().positive().min(1, "dalam jumlah meter"),
   panjangBibir: z.number().positive().min(1, "dalam jumlah meter"),
   JenisPembangunan: z.string().optional(),
   panjangPapanPijak: z.number().positive().optional(),
   lebarGapuraDalam: z.number().positive().optional(),
+  tahunPembuatan: z.number().optional(),
 });
 
 function DataJembatan() {
@@ -61,12 +63,13 @@ function DataJembatan() {
         JenisPembangunan: values.JenisPembangunan,
         panjangPapanPijak: values.panjangPapanPijak,
         lebarGapuraDalam: values.lebarGapuraDalam,
+        tahunPembuatan: values.tahunPembuatan,
       }),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Error:", errorData);
+      console.error("Error:", errorData.message);
       alert("Gagal mengirim data: " + errorData.message); // Optional: Tampilkan error
       return;
     }
@@ -200,7 +203,7 @@ function DataJembatan() {
             name="JenisPembangunan"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>deskripsi jembatan</FormLabel>
+                <FormLabel>Jenis Pembangunan</FormLabel>
                 <FormControl>
                   <Select
                     {...field}
@@ -227,6 +230,27 @@ function DataJembatan() {
 
           {pilihan === "renovasi" && (
             <>
+              <FormField
+                control={form.control}
+                name="tahunPembuatan"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tahun Pembuatan</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={field.value || 0} // Fallback to 0 for numbers
+                        onChange={(e) =>
+                          field.onChange(
+                            e.target.value ? parseInt(e.target.value, 10) : 0
+                          )
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="panjangPapanPijak"
@@ -281,13 +305,9 @@ function DataJembatan() {
             name="image"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>gambar</FormLabel>
+                <FormLabel>Upload Image</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="link"
-                    {...field}
-                    value={field.value || ""}
-                  />
+                  <ReactDropzone field={{ ...field }} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
