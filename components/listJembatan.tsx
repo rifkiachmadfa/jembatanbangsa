@@ -3,9 +3,6 @@ import CardJembatan from "./cardJembatan";
 
 export default async function ListJembatan() {
   const jembatan = await db.jembatan.findMany({
-    where: {
-      published: false,
-    },
     include: {
       user: true,
     },
