@@ -1,21 +1,39 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { useState } from "react";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import ReactDropzone from "../ui/reactDropZone";
+import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
+interface data {
+  namaJembatan: string;
+  alamat: string;
+  penerimaManfaat: number;
+  panjangBentangan: number;
+  panjangBibir: number;
+  jembatanId: string;
+  panjangPapanPijak: number;
+  lebarGapuraAs: number;
+  lebarGapuraDalam: number;
+  jenisPembangunan: string;
+  gambar: string;
+  tahunPembuatan: number;
+  deskripsi: string;
+  panjangGapuraAnchorBelakang: number;
+  boxGapura: number;
+  jenisBesiTiang: string;
+  tinggiGapura: number;
+  panjangBoxAnchorBelakang: number;
+}
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -23,19 +41,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import ReactDropzone from "../ui/reactDropZone";
+import * as z from "zod";
+import { Textarea } from "../ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const FormSchema = z.object({
-  judul: z.string().min(1, "tolong isi Judul").max(23),
+  namaJembatan: z.string().min(1, "tolong isi Judul").max(23),
   alamat: z.string().min(1, "tolong isi alamat ").max(120),
-  content: z.string().min(1, "tolong isi deskripsi"),
-  image: z.string().min(1, "tolong isi gambar"),
+  deskripsi: z.string().min(1, "tolong isi deskripsi"),
+  gambar: z.string().min(1, "tolong isi gambar"),
   penerimaManfaat: z.number().positive().min(1, "dalam jumlah jiwa"),
   panjangBentangan: z.number().positive().min(1, "dalam jumlah meter"),
   panjangBibir: z.number().positive().min(1, "dalam jumlah meter"),
-  JenisPembangunan: z.string().optional(),
-  panjangPapanPijak: z.number().positive().optional(),
-  lebarGapuraDalam: z.number().positive().optional(),
+  jenisPembangunan: z.string().optional(),
+  panjangPapanPijak: z.number().optional(),
+  lebarGapuraDalam: z.number().optional(),
   tahunPembuatan: z.number().optional(),
   panjangGapuraAnchorBelakang: z.number().optional(),
   lebarGapuraAs: z.number().optional(),
@@ -45,28 +65,22 @@ const FormSchema = z.object({
   jenisBesiTiang: z.string().optional(),
 });
 
-function DataJembatan() {
-  const [pilihan, setPilihan] = useState<string>("fullPembangunan");
-  const router = useRouter();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-  });
-
+export default function EditForm(props: data) {
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    const response = await fetch("/api/jembatan", {
-      method: "POST",
+    const response = await fetch(`/api/jembatan/${props.jembatanId}`, {
+      method: "PUT",
       headers: {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        judul: values.judul,
+        judul: values.namaJembatan,
         alamat: values.alamat,
-        content: values.content,
-        image: values.image,
+        content: values.deskripsi,
+        image: values.gambar,
         penerimaManfaat: values.penerimaManfaat,
         panjangBentangan: values.panjangBentangan,
         panjangBibir: values.panjangBibir,
-        JenisPembangunan: values.JenisPembangunan,
+        jenisPembangunan: values.jenisPembangunan,
         panjangPapanPijak: values.panjangPapanPijak,
         lebarGapuraDalam: values.lebarGapuraDalam,
         tahunPembuatan: values.tahunPembuatan,
@@ -85,26 +99,50 @@ function DataJembatan() {
       alert("Gagal mengirim data: " + errorData.message); // Optional: Tampilkan error
       return;
     }
-    router.push("/user");
   };
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      namaJembatan: props.namaJembatan,
+      alamat: props.alamat,
+      deskripsi: props.deskripsi,
+      gambar: props.gambar,
+      jenisPembangunan: props.jenisPembangunan,
+      panjangBentangan: props.panjangBentangan,
+      panjangBibir: props.panjangBibir,
+      panjangPapanPijak: props.panjangPapanPijak,
+      penerimaManfaat: props.penerimaManfaat,
+      lebarGapuraDalam: props.lebarGapuraDalam,
+      lebarGapuraAs: props.lebarGapuraAs,
+      tahunPembuatan: props.tahunPembuatan,
+      panjangGapuraAnchorBelakang: props.panjangGapuraAnchorBelakang,
+      boxGapura: props.boxGapura,
+      panjangBoxAnchorBelakang: props.panjangBoxAnchorBelakang,
+      tinggiGapura: props.tinggiGapura,
+      jenisBesiTiang: props.jenisBesiTiang,
+    },
+  });
+
+  const [pilihan, setPilihan] = useState<string>(
+    props.jenisPembangunan || "fullPembangunan"
+  );
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-        <div className="space-y-2">
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
-            name="judul"
+            name="namaJembatan"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Nama Jembatan</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Isi dengan nama Jembatan"
-                    {...field}
-                    value={field.value || ""}
-                  />
+                  <Input placeholder="shadcn" {...field} />
                 </FormControl>
+                <FormDescription>
+                  This is your public display name.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -114,14 +152,13 @@ function DataJembatan() {
             name="alamat"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Alamat</FormLabel>
+                <FormLabel>Alamat Jembatan</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Kampung, Desa, Kecamatan, Kabupaten, Provinsi"
-                    {...field}
-                    value={field.value || ""}
-                  />
+                  <Input placeholder="shadcn" {...field} />
                 </FormControl>
+                <FormDescription>
+                  This is your public display name.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -134,11 +171,10 @@ function DataJembatan() {
                 <FormLabel>Jumlah Penerima Manfaat</FormLabel>
                 <FormControl>
                   <Input
-                    type="number"
-                    placeholder="1250"
+                    placeholder="shadcn"
                     {...field}
-                    min={0}
-                    value={field.value || 0} // Fallback to 0 for numbers
+                    type="number"
+                    value={field.value || 0}
                     onChange={(e) =>
                       field.onChange(
                         e.target.value ? parseInt(e.target.value, 10) : 0
@@ -146,6 +182,9 @@ function DataJembatan() {
                     }
                   />
                 </FormControl>
+                <FormDescription>
+                  This is your public display name.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -155,64 +194,52 @@ function DataJembatan() {
             name="panjangBentangan"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Panjang Bentangan (M)</FormLabel>
+                <FormLabel>Panjang Bentangan (m)</FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="dalam satuan meter"
-                    {...field}
-                    value={field.value || 0} // Fallback to 0 for numbers
-                    onChange={(e) =>
-                      field.onChange(
-                        e.target.value ? parseInt(e.target.value, 10) : 0
-                      )
-                    }
-                  />
+                  <Input placeholder="shadcn" {...field} />
                 </FormControl>
+                <FormDescription>
+                  This is your public display name.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="panjangBibir"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Panjang Bibir (M)</FormLabel>
+                <FormLabel>Panjang Bibir Sungai (m)</FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="dalam satuan meter"
-                    {...field}
-                    value={field.value || 0} // Fallback to 0 for numbers
-                    onChange={(e) =>
-                      field.onChange(
-                        e.target.value ? parseInt(e.target.value, 10) : 0
-                      )
-                    }
-                  />
+                  <Input placeholder="shadcn" {...field} />
                 </FormControl>
+                <FormDescription>
+                  This is your public display name.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="content"
+            name="deskripsi"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>deskripsi jembatan</FormLabel>
+                <FormLabel>Deskripsi Kondisi Jembatan</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="dalam satuan meter" {...field} />
+                  <Textarea placeholder="shadcn" {...field} />
                 </FormControl>
+                <FormDescription>
+                  This is your public display name.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="JenisPembangunan"
+            name="jenisPembangunan"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Jenis Pembangunan</FormLabel>
@@ -239,7 +266,6 @@ function DataJembatan() {
               </FormItem>
             )}
           />
-
           {pilihan === "renovasi" && (
             <>
               <FormField
@@ -434,7 +460,7 @@ function DataJembatan() {
                       <Input
                         {...field}
                         placeholder=""
-                        value={field.value || " "} // Fallback to 0 for numbers
+                        value={field.value || ""} // Fallback to 0 for numbers
                       />
                     </FormControl>
                     <FormMessage />
@@ -443,10 +469,9 @@ function DataJembatan() {
               />
             </>
           )}
-
           <FormField
             control={form.control}
-            name="image"
+            name="gambar"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Upload Image</FormLabel>
@@ -457,18 +482,16 @@ function DataJembatan() {
               </FormItem>
             )}
           />
-        </div>
-        <div className="flex justify-end gap-2">
-          <Button variant="outline" className=" mt-6">
-            batal
-          </Button>
-          <Button className="mt-6 w-[1/2]" type="submit">
-            Ajukan
-          </Button>
-        </div>
-      </form>
-    </Form>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" className=" mt-6">
+              batal
+            </Button>
+            <Button className="mt-6 w-[1/2]" type="submit">
+              Ajukan
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </>
   );
 }
-
-export default DataJembatan;

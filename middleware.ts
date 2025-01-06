@@ -9,19 +9,22 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
+  const userRole = token.role;
+
+  if (userRole === "admin") {
+    return NextResponse.next(); // Admin bisa akses
+  }
+
   // Define role-based access control
   const adminRoutes = ["/admin"];
   const userRoutes = ["/user"];
 
   if (adminRoutes.includes(req.nextUrl.pathname) && token.role !== "admin") {
-    return NextResponse.redirect(new URL("/no-access", req.url));
+    return NextResponse.redirect(new URL("/NotAuthorized", req.url));
   }
   if (userRoutes.includes(req.nextUrl.pathname) && token.role !== "pengaju") {
-    return NextResponse.redirect(new URL("/no-access", req.url));
+    return NextResponse.redirect(new URL("/NotAuthorized", req.url));
   }
-
-  // If everything checks out, proceed
-  return NextResponse.next();
 }
 
 // Specify the routes that require the middleware

@@ -41,7 +41,7 @@ model Jembatan {
   panjangBentangan            Float
   panjangBibir                Float
   jenisPembangunan            JenisPembangunan @default(fullPembangunan)
-     tahunPembuatan              Int?
+  tahunPembuatan              Int?
   panjangGapuraAnchorBelakang Float?
   panjangPapanPijak         Float?
   lebarGapuraDalam           Float?
