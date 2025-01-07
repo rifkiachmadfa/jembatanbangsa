@@ -2,7 +2,7 @@
 import React from "react";
 
 const Custom404 = () => {
-  return <h1>Page Not Found</h1>;
+  return <h1>Page Not Founds</h1>;
 };
 
 export default Custom404;

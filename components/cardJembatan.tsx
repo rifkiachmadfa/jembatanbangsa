@@ -34,6 +34,7 @@ export default async function CardJembatan({
   link,
 }: CardProps) {
   const nilai = (terkumpul * 100) / target;
+
   return (
     <div>
       <Card className="w-[360px] h-[500px] rounded ">

@@ -33,6 +33,7 @@ interface data {
   tinggiGapura: number;
   panjangBoxAnchorBelakang: number;
 }
+
 import { useState } from "react";
 import {
   Select,
@@ -44,6 +45,7 @@ import {
 import * as z from "zod";
 import { Textarea } from "../ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { redirect } from "next/navigation";
 
 const FormSchema = z.object({
   namaJembatan: z.string().min(1, "tolong isi Judul").max(23),
@@ -122,6 +124,10 @@ export default function EditForm(props: data) {
       jenisBesiTiang: props.jenisBesiTiang,
     },
   });
+
+  function handleCancel() {
+    redirect("/user");
+  }
 
   const [pilihan, setPilihan] = useState<string>(
     props.jenisPembangunan || "fullPembangunan"
@@ -483,10 +489,16 @@ export default function EditForm(props: data) {
             )}
           />
           <div className="flex justify-end gap-2">
-            <Button variant="outline" className=" mt-6">
+            <Button onClick={handleCancel} variant="outline" className=" mt-6">
               batal
             </Button>
-            <Button className="mt-6 w-[1/2]" type="submit">
+            <Button
+              onClick={() => {
+                redirect("/user");
+              }}
+              className="mt-6 w-[1/2]"
+              type="submit"
+            >
               Ajukan
             </Button>
           </div>

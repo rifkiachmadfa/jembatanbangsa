@@ -4,18 +4,18 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-interface params {
-  params: {
-    id: string;
-  };
-}
+type tParams = Promise<{ id: string[] }>;
 
-export default async function pageEdit({ params }: params) {
+export default async function pageEdit({ params }: { params: tParams }) {
   const getUser = await getServerSession(authOptions);
   const { id } = await params;
+  const idString = String(id);
+  if (!id) {
+    redirect("/404");
+  }
   const data = await db.jembatan.findUnique({
     where: {
-      id: id,
+      id: idString,
     },
     include: {
       user: true,

@@ -6,19 +6,19 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import { Progress } from "@/components/ui/progress";
 import TabelSpesifikasi from "@/components/tabelSpesifikasi";
 import { Button } from "@/components/ui/button";
-type Params = Promise<{ id: string }>; // Define params type
-
-const JembatanPage = async ({ params }: { params: Params }) => {
-  const { id } = await params; // Directly access the id from params
-
-  if (!id) {
+type tParams = Promise<{ id: string[] }>;
+const JembatanPage = async ({ params }: { params: tParams }) => {
+  const { id } = await params;
+  const idString = String(id);
+  if (!idString) {
     // Tangani kasus di mana id tidak ada
     notFound(); // Mengarahkan ke halaman 404 Next.js
   }
-
   // Ambil data dari database
   const data = await db.jembatan.findUnique({
-    where: { id },
+    where: {
+      id: idString,
+    },
     include: {
       user: true,
     },

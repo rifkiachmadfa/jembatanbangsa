@@ -1,14 +1,23 @@
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth"; // Pastikan path authOptions benar
-import CardJembatan from "./cardJembatan";
+
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+import DeleteDialog from "./deleteDialog";
 
 export default async function ListJembatanUser() {
-  // Ambil sesi pengguna yang aktif
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user?.email) {
-    // Jika tidak ada sesi, minta login
     return (
       <p className="text-center">
         Silakan login untuk melihat data jembatan Anda.
@@ -16,37 +25,56 @@ export default async function ListJembatanUser() {
     );
   }
 
-  // Ambil data jembatan berdasarkan email pengguna
   const user = await db.user.findUnique({
     where: {
       email: session.user.email,
     },
     include: {
-      jembatan: true, // Relasi ke tabel jembatan
+      jembatan: true,
     },
   });
 
-  // Jika pengguna tidak memiliki jembatan, tampilkan pesan
   if (!user?.jembatan?.length) {
     return <p className="text-center">Anda belum memiliki data jembatan.</p>;
   }
 
+  // const jembatanId = user.jembatan[0].id;
+
+  // function deleteHandler() {
+  //   console.log("trigger");
+  // }
+
   return (
-    <div className="flex justify-center">
-      <div className="grid grid-cols-4 gap-4">
-        {user.jembatan.map((data) => (
-          <CardJembatan
-            key={data.id}
-            namaJembatan={data.judul}
-            deskripsi={data.alamat}
-            gambar={data.image}
-            target={data.target}
-            terkumpul={data.terkumpul}
-            link={data.id}
-            user="anda"
-          />
-        ))}
-      </div>
+    <div className="flex justify-center ">
+      <Table>
+        <TableCaption>Daftar Jembatan</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="">Nama Jembatan</TableHead>
+            <TableHead>Status Pengajuan</TableHead>
+            <TableHead>Status Pembangunan</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {user.jembatan.map((data) => (
+            <TableRow key={data.id}>
+              <TableCell className="">{data.judul}</TableCell>
+              {data.published === false ? (
+                <TableCell className="bg-text-red">Ditinjau</TableCell>
+              ) : (
+                <TableCell>Disetujui</TableCell>
+              )}
+
+              <TableCell>{data.status}</TableCell>
+
+              <TableCell className=" ">
+                <DeleteDialog dataId={data.id} />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

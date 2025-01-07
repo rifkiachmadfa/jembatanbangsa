@@ -13,7 +13,7 @@ import { Input } from "../ui/input";
 import { useState } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import {
@@ -459,7 +459,13 @@ function DataJembatan() {
           />
         </div>
         <div className="flex justify-end gap-2">
-          <Button variant="outline" className=" mt-6">
+          <Button
+            onClick={() => {
+              redirect("/user");
+            }}
+            variant="outline"
+            className=" mt-6"
+          >
             batal
           </Button>
           <Button className="mt-6 w-[1/2]" type="submit">
